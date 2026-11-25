@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Estudo acadêmico sobre a estrutura de dados Treap.">
+    <title>Treap | Estruturas de Dados</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <header class="navbar">
+        <a class="logo" href="#inicio" aria-label="Treap — voltar ao início">TREAP</a>
+        <nav aria-label="Navegação principal">
+            <a href="#inicio">Início</a>
+            <a href="#introducao">Fundamentos</a>
+            <a href="#funcionamento">Funcionamento</a>
+            <a href="#complexidade">Análise</a>
+            <a href="#aplicacoes">Aplicações</a>
+            <a href="interacao.html" class="nav-highlight">Simulador</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- APRESENTAÇÃO -->
+        <section class="hero" id="inicio">
+            <div class="hero-content">
+                <span class="tag">ESTRUTURAS DE DADOS AVANÇADAS</span>
+
+                <h1>
+                    TREAP
+                    <span>Tree + Heap</span>
+                </h1>
+                <p>Uma estrutura de dados híbrida que combina as propriedades
+                    de uma Árvore Binária de Busca (BST) com as propriedades
+                    de uma Heap, utilizando prioridades aleatórias para
+                    obter um balanceamento probabilístico.</p>
+
+                <div class="hero-actions">
+                    <a href="#introducao" class="btn">
+                        Explorar estrutura ↓
+                    </a>
+                    <a href="interacao.html" class="btn btn-secondary">
+                        Testar na prática →
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="tree-label">BST + HEAP</div>
+
+                <div class="tree">
+                    <div class="tree-level">
+                        <div class="node root">
+                            <strong>50</strong>
+                            <small>Prioridade: 10</small>
+                        </div>
+                    </div>
+
+                    <div class="tree-branches">
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <div class="tree-level">
+                        <div class="node">
+                            <strong>25</strong>
+                            <small>Prioridade: 20</small>
+                        </div>
+
+                        <div class="node">
+                            <strong>75</strong>
+                            <small>Prioridade: 30</small>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="visual-caption">
+                    Exemplo ilustrativo de uma Treap com prioridade mínima
+                </p>
+            </div>
+        </section>
+
+
+        <!-- INTRODUÇÃO -->
+        <section class="section" id="introducao">
+
+            <div class="section-heading">
+                <span class="tag">01 — INTRODUÇÃO</span>
+                <h2>O que é uma Treap?</h2>
+                <p>Uma combinação de duas estruturas em uma única árvore.</p>
+            </div>
+
+            <div class="intro-grid">
+
+                <div class="intro-text">
+                    <p>
+                        A <strong>Treap</strong> é uma estrutura de dados
+                        baseada em árvores binárias que combina duas
+                        propriedades fundamentais: a organização de uma
+                        Árvore Binária de Busca (BST) e a ordenação de uma
+                        Heap.
+                    </p>
+
+                    <p>
+                        Seu nome vem da junção das palavras
+                        <strong>Tree</strong> (árvore) e
+                        <strong>Heap</strong> (fila de prioridades em árvore).
+                        Essa combinação permite organizar elementos por suas
+                        chaves e, simultaneamente, controlar sua estrutura
+                        utilizando prioridades.
+                    </p>
+
+                    <p>
+                        Diferentemente de uma BST tradicional, que pode
+                        ficar desbalanceada dependendo da ordem de inserção,
+                        a Treap utiliza prioridades geradas aleatoriamente
+                        para produzir uma estrutura que tende a permanecer
+                        balanceada.
+                    </p>
+                </div>
+
+                <div class="concept-card">
+                    <div class="concept-item">
+                        <span class="concept-number">01</span>
+                        <h3>Tree (BST)</h3>
+                        <p>
+                            Organiza os valores de acordo com suas chaves,
+                            mantendo os menores à esquerda e os maiores
+                            à direita.
+                        </p>
+                    </div>
+
+                    <div class="concept-divider"></div>
+
+                    <div class="concept-item">
+                        <span class="concept-number">02</span>
+                        <h3>Heap</h3>
+                        <p>
+                            Organiza os nós de acordo com suas prioridades,
+                            mantendo uma relação de prioridade entre
+                            pais e filhos.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- CONTEXTO HISTÓRICO -->
+        <section class="section history-section" id="historico">
+
+            <div class="section-heading">
+                <span class="tag">02 — CONTEXTO HISTÓRICO</span>
+                <h2>Origem e motivação</h2>
+            </div>
+
+            <div class="history-content">
+                <div class="history-date">
+                    <span>1996</span>
+                    <small>PUBLICAÇÃO</small>
+                </div>
+
+                <div class="history-text">
+                    <h3>Árvores de busca randomizadas</h3>
+
+                    <p>
+                        A Treap foi apresentada no trabalho
+                        <em>Randomized Search Trees</em>, de Raimund Seidel
+                        e Cecilia R. Aragon, publicado na revista
+                        Algorithmica em 1996.
+                    </p>
+
+                    <p>
+                        A proposta surgiu como uma maneira de construir
+                        árvores de busca eficientes sem depender de
+                        procedimentos complexos de balanceamento
+                        determinístico.
+                    </p>
+
+                    <p>
+                        Ao atribuir prioridades aleatórias aos nós,
+                        a estrutura consegue obter, em expectativa,
+                        uma altura logarítmica, tornando operações como
+                        busca, inserção e remoção eficientes.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- FUNCIONAMENTO TÉCNICO -->
+        <section class="section" id="funcionamento">
+
+            <div class="section-heading">
+                <span class="tag">03 — FUNCIONAMENTO TÉCNICO</span>
+                <h2>Como funciona uma Treap?</h2>
+
+                <p>
+                    Para compreender seu funcionamento, é necessário
+                    entender que cada nó possui duas informações
+                    fundamentais.
+                </p>
+            </div>
+
+            <div class="technical-grid">
+
+                <div class="technical-card">
+                    <div class="card-icon">K</div>
+                    <h3>Chave (Key)</h3>
+                    <p>
+                        Representa o valor armazenado no nó. É utilizada
+                        para organizar a árvore seguindo as regras de
+                        uma Árvore Binária de Busca.
+                    </p>
+                </div>
+
+                <div class="technical-card">
+                    <div class="card-icon">P</div>
+                    <h3>Prioridade (Priority)</h3>
+                    <p>
+                        É um valor geralmente gerado aleatoriamente.
+                        Determina a posição hierárquica do nó seguindo
+                        as regras de uma Heap.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="explanation-block">
+                <h3>As duas propriedades fundamentais</h3>
+
+                <div class="rule">
+                    <span class="rule-number">01</span>
+
+                    <div>
+                        <h4>Propriedade BST — Ordenação pelas chaves</h4>
+                        <p>
+                            Para cada nó, todas as chaves presentes na
+                            subárvore esquerda devem ser menores que sua
+                            chave, enquanto todas as chaves da subárvore
+                            direita devem ser maiores.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="rule">
+                    <span class="rule-number">02</span>
+
+                    <div>
+                        <h4>Propriedade Heap — Ordenação pelas prioridades</h4>
+                        <p>A prioridade de cada nó deve respeitar a
+                            relação de Heap com seus filhos. Nesta
+                            demonstração, utilizaremos uma Min-Heap:
+                            o pai sempre possui prioridade menor que
+                            seus filhos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section example-section">
+            <div class="section-heading">
+                <span class="tag">04 — EXEMPLO PRÁTICO</span>
+                <h2>Entendendo a organização</h2>
+                <p>Observe como uma mesma árvore precisa respeitar
+                simultaneamente as duas propriedades.
+                </p>
+            </div>
+            <div class="example-layout">
+                <div class="example-tree">
+                    <div class="example-node root-node">
+                        <strong>50</strong>
+                        <small>P: 10</small>
+                    </div>
+                    <div class="example-lines">
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="example-children">
+                        <div class="example-node">
+                            <strong>25</strong>
+                            <small>P: 20</small>
+                        </div>
+                        <div class="example-node">
+                            <strong>75</strong>
+                            <small>P: 30</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="example-info">
+                    <div>
+                        <span class="status-dot blue"></span>
+                        <strong>Regra BST</strong>
+                        <p>25 é menor que 50, portanto fica à esquerda.
+                        75 é maior que 50, portanto fica à direita.</p>
+                    </div>
+                    <div>
+                        <span class="status-dot purple"></span>
+                        <strong>Regra Min-Heap</strong>
+                        <p>A prioridade 10 do nó 50 é menor que as
+                            prioridades 20 e 30 de seus filhos.</p>
+                    </div>
+                    <div class="valid-message">
+                        ✓ As duas propriedades são respeitadas!
+                    </div>
+                </div>
+            </div>
+            <div class="note">
+                <strong>Importante:</strong> Os números apresentados
+                representam apenas um exemplo didático. A chave determina
+                a posição de busca, enquanto a prioridade determina
+                a hierarquia da Heap.
+            </div>
+        </section>
+
+        <section class="section" id="propriedades">
+            <div class="section-heading">
+                <span class="tag">05 — PRIORIDADES</span>
+                <h2>Min-Heap ou Max-Heap?</h2>
+                <p>A Treap pode utilizar diferentes convenções
+                de prioridade.
+                </p>
+            </div>
+            <div class="heap-selector">
+                <div class="heap-buttons">
+                    <button class="heap-btn active" data-heap="min">
+                        Min-Heap
+                    </button>
+                    <button class="heap-btn" data-heap="max">
+                        Max-Heap
+                    </button>
+                </div>
+                <div class="heap-description">
+                    <h3 id="heap-title">Min-Heap</h3>
+                    <p id="heap-text">O nó pai deve possuir uma prioridade menor que seus filhos.
+                        Portanto, a menor prioridade
+                        fica no topo da árvore.</p>
+                    <div class="heap-rule" id="heap-rule">Pai ≤ Filhos</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANÁLISE DE COMPLEXIDADE -->
+        <section class="section complexity-section" id="complexidade">
+
+            <div class="section-heading">
+                <span class="tag">06 — ANÁLISE DE COMPLEXIDADE</span>
+
+                <h2>Eficiência e desempenho</h2>
+
+                <p>
+                    A eficiência de uma Treap depende principalmente da altura
+                    da árvore. Como suas prioridades são geradas aleatoriamente,
+                    seu balanceamento é probabilístico.
+                </p>
+            </div>
+
+            <div class="complexity-intro">
+                <div class="complexity-highlight">
+                    <span class="big-o">O(log n)</span>
+                    <h3>Complexidade esperada</h3>
+                    <p>
+                        Com prioridades aleatórias independentes, a altura
+                        esperada da Treap é logarítmica, permitindo executar
+                        suas principais operações de maneira eficiente.
+                    </p>
+                </div>
+
+                <div class="complexity-explanation">
+                    <h3>O que isso significa?</h3>
+
+                    <p>
+                        A notação O(log n) indica que o número de operações
+                        cresce proporcionalmente ao logaritmo da quantidade
+                        de elementos da árvore.
+                    </p>
+
+                    <p>
+                        Isso significa que, mesmo com muitos elementos,
+                        a quantidade de níveis percorridos tende a crescer
+                        lentamente.
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="subsection-title">Complexidade das operações</h3>
+
+            <div class="table-container">
+                <table class="complexity-table">
+
+                    <thead>
+                        <tr>
+                            <th>Operação</th>
+                            <th>Caso esperado</th>
+                            <th>Pior caso</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Busca</td>
+                            <td><span class="complexity-good">O(log n)</span></td>
+                            <td>O(n)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Inserção</td>
+                            <td><span class="complexity-good">O(log n)</span></td>
+                            <td>O(n)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Remoção</td>
+                            <td><span class="complexity-good">O(log n)</span></td>
+                            <td>O(n)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Split</td>
+                            <td><span class="complexity-good">O(log n)</span></td>
+                            <td>O(n)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Merge</td>
+                            <td><span class="complexity-good">O(log n)</span></td>
+                            <td>O(n)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Espaço</td>
+                            <td><span class="complexity-good">O(n)</span></td>
+                            <td>O(n)</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div class="complexity-notes">
+
+                <div class="complexity-note">
+                    <h4>Melhor caso</h4>
+                    <p>
+                        O desempenho depende da operação realizada e da posição
+                        do elemento. Por exemplo, uma busca pelo elemento que
+                        está na raiz pode ser concluída em O(1).
+                    </p>
+                </div>
+
+                <div class="complexity-note">
+                    <h4>Caso esperado</h4>
+                    <p>
+                        Com prioridades aleatórias e sem colisões, a Treap
+                        apresenta altura esperada O(log n), tornando suas
+                        operações eficientes em média.
+                    </p>
+                </div>
+
+                <div class="complexity-note">
+                    <h4>Pior caso</h4>
+                    <p>
+                        Caso as prioridades produzam uma árvore completamente
+                        desbalanceada, sua altura pode chegar a n, resultando
+                        em operações de O(n).
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="note">
+                <strong>Observação:</strong> O desempenho esperado depende
+                de prioridades aleatórias independentes e de uma política
+                adequada para tratar prioridades repetidas. Diferentemente
+                das árvores AVL e Red-Black, a Treap não garante altura
+                logarítmica em todas as execuções.
+            </div>
+
+        </section>
+
+        <!-- COMPARAÇÃO COM OUTRAS ESTRUTURAS -->
+        <section class="section comparison-section" id="comparacao">
+
+            <div class="section-heading">
+                <span class="tag">07 — COMPARAÇÃO DE ESTRUTURAS</span>
+
+                <h2>Treap vs. outras árvores</h2>
+
+                <p>
+                    Existem diferentes maneiras de organizar e balancear
+                    árvores de busca. Cada estrutura utiliza estratégias
+                    próprias para manter sua eficiência.
+                </p>
+            </div>
+
+            <div class="comparison-cards">
+
+                <!-- BST -->
+                <article class="comparison-card">
+                    <span class="comparison-number">01</span>
+
+                    <h3>BST Tradicional</h3>
+
+                    <p>
+                        Árvore Binária de Busca que organiza os elementos
+                        pelas chaves, sem utilizar mecanismos automáticos
+                        de balanceamento.
+                    </p>
+
+                    <div class="comparison-complexity">
+                        <span>Busca média</span>
+                        <strong>O(log n)*</strong>
+                    </div>
+
+                    <div class="comparison-complexity">
+                        <span>Pior caso</span>
+                        <strong class="bad-complexity">O(n)</strong>
+                    </div>
+
+                    <div class="comparison-footer">
+                        Simplicidade de implementação
+                    </div>
+                </article>
+
+
+                <!-- TREAP -->
+                <article class="comparison-card featured-card">
+                    <span class="comparison-number">02</span>
+
+                    <h3>Treap</h3>
+                    <p>Combina as propriedades de uma BST e de uma Heap,
+                        utilizando prioridades aleatórias para obter
+                        balanceamento probabilístico.</p>
+                    <div class="comparison-complexity">
+                        <span>Busca esperada</span>
+                        <strong>O(log n)</strong>
+                    </div>
+
+                    <div class="comparison-complexity">
+                        <span>Pior caso</span>
+                        <strong class="bad-complexity">O(n)</strong>
+                    </div>
+
+                    <div class="comparison-footer">
+                        Simplicidade e randomização
+                    </div>
+                </article>
+
+
+                <!-- AVL -->
+                <article class="comparison-card">
+                    <span class="comparison-number">03</span>
+
+                    <h3>AVL Tree</h3>
+
+                    <p>
+                        Árvore de busca autobalanceada que controla a diferença
+                        de altura entre as subárvores de cada nó, utilizando
+                        rotações para preservar o equilíbrio.
+                    </p>
+
+                    <div class="comparison-complexity">
+                        <span>Busca</span>
+                        <strong>O(log n)</strong>
+                    </div>
+
+                    <div class="comparison-complexity">
+                        <span>Pior caso</span>
+                        <strong>O(log n)</strong>
+                    </div>
+
+                    <div class="comparison-footer">
+                        Forte controle de balanceamento
+                    </div>
+                </article>
+
+
+                <!-- RED BLACK -->
+                <article class="comparison-card">
+                    <span class="comparison-number">04</span>
+
+                    <h3>Red-Black Tree</h3>
+
+                    <p>
+                        Árvore de busca autobalanceada que utiliza cores
+                        e regras específicas para controlar a altura
+                        e manter operações eficientes.
+                    </p>
+
+                    <div class="comparison-complexity">
+                        <span>Busca</span>
+                        <strong>O(log n)</strong>
+                    </div>
+
+                    <div class="comparison-complexity">
+                        <span>Pior caso</span>
+                        <strong>O(log n)</strong>
+                    </div>
+
+                    <div class="comparison-footer">
+                        Balanceamento determinístico
+                    </div>
+                </article>
+
+            </div>
+
+
+            <!-- TABELA COMPARATIVA -->
+            <h3 class="subsection-title">Comparação geral</h3>
+
+            <div class="table-container">
+
+                <table class="complexity-table comparison-table">
+
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>BST</th>
+                            <th>Treap</th>
+                            <th>AVL</th>
+                            <th>Red-Black</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Balanceamento</td>
+                            <td>Não possui</td>
+                            <td>Probabilístico</td>
+                            <td>Determinístico</td>
+                            <td>Determinístico</td>
+                        </tr>
+
+                        <tr>
+                            <td>Busca média/esperada</td>
+                            <td>O(log n)*</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Busca no pior caso</td>
+                            <td>O(n)</td>
+                            <td>O(n)</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Inserção</td>
+                            <td>O(h)</td>
+                            <td>O(log n) esperado</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Remoção</td>
+                            <td>O(h)</td>
+                            <td>O(log n) esperado</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Utiliza rotações</td>
+                            <td>Não</td>
+                            <td>Sim</td>
+                            <td>Sim</td>
+                            <td>Sim</td>
+                        </tr>
+
+                        <tr>
+                            <td>Utiliza prioridades aleatórias</td>
+                            <td>Não</td>
+                            <td>Sim</td>
+                            <td>Não</td>
+                            <td>Não</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="note">
+                <strong>Legenda:</strong> h representa a altura da árvore.
+                Na BST tradicional, O(log n) é uma expectativa que depende
+                da distribuição dos dados; no pior caso, ela pode chegar
+                a O(n). As operações da Treap também possuem custo esperado
+                O(log n), mas não oferecem a mesma garantia determinística
+                das árvores AVL e Red-Black.
+            </div>
+
+
+            <!-- CONCLUSÃO DA COMPARAÇÃO -->
+            <div class="comparison-conclusion">
+
+                <h3>Qual estrutura escolher?</h3>
+
+                <div class="choice-item">
+                    <span>BST</span>
+                    <p>
+                        Quando a simplicidade é prioridade e os dados não
+                        apresentam risco significativo de desbalanceamento.
+                    </p>
+                </div>
+
+                <div class="choice-item">
+                    <span>Treap</span>
+                    <p>
+                        Quando se deseja uma implementação relativamente
+                        simples, com operações eficientes em expectativa
+                        e facilidade para executar Split e Merge.
+                    </p>
+                </div>
+
+                <div class="choice-item">
+                    <span>AVL</span>
+                    <p>
+                        Quando buscas rápidas e uma altura rigorosamente
+                        controlada são importantes.
+                    </p>
+                </div>
+
+                <div class="choice-item">
+                    <span>Red-Black</span>
+                    <p>
+                        Quando é necessário balanceamento garantido,
+                        com operações eficientes e bom desempenho em
+                        estruturas que realizam muitas modificações.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- APLICAÇÕES PRÁTICAS -->
+        <section class="section applications-section" id="aplicacoes">
+
+            <div class="section-heading">
+                <span class="tag">08 — APLICAÇÕES PRÁTICAS</span>
+
+                <h2>Onde as Treaps são utilizadas?</h2>
+
+                <p>
+                    A flexibilidade das operações de busca, inserção,
+                    remoção, Split e Merge permite utilizar Treaps
+                    em diferentes problemas computacionais.
+                </p>
+            </div>
+
+            <div class="applications-grid">
+
+                <article class="application-card">
+                    <div class="application-icon">01</div>
+
+                    <h3>Programação competitiva</h3>
+
+                    <p>
+                        Treaps são utilizadas em problemas algorítmicos
+                        que exigem conjuntos ordenados, inserções e
+                        remoções dinâmicas e consultas eficientes.
+                    </p>
+
+                    <span class="application-tag">
+                        Estruturas dinâmicas
+                    </span>
+                </article>
+
+
+                <article class="application-card">
+                    <div class="application-icon">02</div>
+
+                    <h3>Consultas em intervalos</h3>
+
+                    <p>
+                        Com operações de Split e Merge, é possível
+                        isolar determinados intervalos de valores,
+                        executar operações sobre eles e reconstruir
+                        a estrutura.
+                    </p>
+
+                    <span class="application-tag">
+                        Range Queries
+                    </span>
+                </article>
+
+
+                <article class="application-card">
+                    <div class="application-icon">03</div>
+
+                    <h3>Persistent Treaps</h3>
+
+                    <p>
+                        Uma versão persistente permite preservar versões
+                        anteriores da árvore após modificações. Isso
+                        possibilita consultar estados anteriores sem
+                        perder os dados originais.
+                    </p>
+
+                    <span class="application-tag">
+                        Estruturas imutáveis
+                    </span>
+                </article>
+
+
+                <article class="application-card">
+                    <div class="application-icon">04</div>
+
+                    <h3>Manipulação de sequências</h3>
+
+                    <p>
+                        As Implicit Treaps permitem inserir, remover,
+                        inverter e consultar elementos em posições
+                        específicas de sequências, funcionando como
+                        uma estrutura de sequência dinâmica.
+                    </p>
+
+                    <span class="application-tag">
+                        Implicit Treap
+                    </span>
+                </article>
+
+            </div>
+
+
+            <div class="application-example">
+
+                <div>
+                    <span class="tag">EXEMPLO DE UTILIZAÇÃO</span>
+
+                    <h3>Consultando um intervalo de valores</h3>
+
+                    <p>
+                        Imagine uma Treap armazenando os valores
+                        de um conjunto ordenado. Para trabalhar
+                        apenas com os valores entre 20 e 60,
+                        podemos utilizar operações de Split.
+                    </p>
+
+                    <p>
+                        Primeiro, separamos os valores menores
+                        ou iguais a 60. Depois, separamos os
+                        valores menores que 20. A parte restante
+                        contém exatamente o intervalo desejado.
+                    </p>
+                </div>
+
+                <div class="interval-example">
+
+                    <div class="interval-row">
+                        <span>Valores originais</span>
+                        <strong>10, 20, 30, 40, 50, 60, 70, 80</strong>
+                    </div>
+
+                    <div class="interval-row">
+                        <span>Após Split (60)</span>
+                        <strong>10, 20, 30, 40, 50, 60 | 70, 80</strong>
+                    </div>
+
+                    <div class="interval-row">
+                        <span>Após Split (19)</span>
+                        <strong>10 | 20, 30, 40, 50, 60</strong>
+                    </div>
+
+                    <div class="interval-result">
+                        <span>Intervalo selecionado</span>
+                        <strong>[20, 30, 40, 50, 60]</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="note">
+                <strong>Importante:</strong> Split e Merge reorganizam
+                os nós e permitem isolar intervalos. Para calcular
+                rapidamente soma, mínimo ou máximo de um intervalo,
+                é necessário armazenar informações adicionais em cada
+                nó e atualizá-las durante as operações.
+            </div>
+
+            <div class="implementation-download">
+                <div>
+                    <span class="tag">LABORATÓRIO INTERATIVO</span>
+                    <h3>Experimente a Treap em tempo real</h3>
+                    <p>
+                        Acesse o simulador interativo baseado em <code>treap.py</code>
+                        para inserir, buscar, remover nós e testar operações de Split e Merge.
+                    </p>
+                </div>
+                <a href="interacao.html" class="btn">Abrir simulador →</a>
+            </div>
+
+        </section>
+
+        <footer>
+            <div class="logo">TREAP<span>.</span></div>
+
+            <p>Projeto acadêmico — Estruturas de Dados Avançadas</p>
+            <a href="#inicio">Voltar ao início ↑</a>
+        </footer>
+    </main>
+    <script src="javascript.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simulador interativo da estrutura de dados Treap baseado em treap.py.">
+    <title>Simulador Interativo | Treap</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <header class="navbar">
+        <a class="logo" href="index.html" aria-label="Treap — voltar para a página teórica">TREAP<span>.</span></a>
+        <nav aria-label="Navegação do simulador">
+            <a href="index.html">← Conteúdo Teórico</a>
+            <a href="#simulador">Visualizador</a>
+            <a href="#split-merge">Split & Merge</a>
+            <a href="#codigo-referencia">Código Python</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- CABEÇALHO DO SIMULADOR -->
+        <section class="sim-hero" id="simulador">
+            <div class="sim-header">
+                <div>
+                    <span class="tag">LABORATÓRIO INTERATIVO • BASEADO EM TREAP.PY</span>
+                    <h1>Simulador de Treap</h1>
+                    <p>
+                        Insira, remova, busque elementos e execute operações de
+                        <strong>Split</strong> e <strong>Merge</strong> em tempo real,
+                        observando as rotações que mantêm simultaneamente as regras de
+                        <strong>BST</strong> e <strong>Heap</strong>.
+                    </p>
+                </div>
+
+                <!-- MODO MIN-HEAP / MAX-HEAP -->
+                <div class="sim-mode-box">
+                    <span class="sim-mode-label">CONVENÇÃO DA HEAP (<code>better(a, b)</code>)</span>
+                    <div class="heap-buttons sim-heap-buttons">
+                        <button type="button" class="heap-btn active" data-sim-heap="min" aria-pressed="true">
+                            Min-Heap (a &lt; b)
+                        </button>
+                        <button type="button" class="heap-btn" data-sim-heap="max" aria-pressed="false">
+                            Max-Heap (a &gt; b)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAINEL DE CONTROLES -->
+            <div class="sim-controls-grid">
+
+                <!-- INSERIR -->
+                <form class="control-card" id="form-insert">
+                    <div class="control-card-header">
+                        <span class="control-badge blue">insert(node, key, priority)</span>
+                        <h3>Inserir Nó</h3>
+                    </div>
+                    <div class="control-inputs">
+                        <div class="input-group">
+                            <label for="insert-key">Chave (key)</label>
+                            <input type="number" id="insert-key" placeholder="Ex: 45" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="insert-priority">Prioridade (opcional)</label>
+                            <input type="number" id="insert-priority" min="1" max="999" placeholder="Aleatória (1–999)">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn control-btn">Inserir na Treap</button>
+                </form>
+
+                <!-- BUSCAR E REMOVER -->
+                <div class="control-card">
+                    <div class="control-card-header">
+                        <span class="control-badge purple">search() / remove()</span>
+                        <h3>Buscar ou Remover</h3>
+                    </div>
+                    <div class="control-inputs single">
+                        <div class="input-group">
+                            <label for="action-key">Chave alvo (key)</label>
+                            <input type="number" id="action-key" placeholder="Ex: 40">
+                        </div>
+                    </div>
+                    <div class="control-btn-row">
+                        <button type="button" id="btn-search" class="btn btn-secondary control-btn">Buscar</button>
+                        <button type="button" id="btn-remove" class="btn btn-danger control-btn">Remover</button>
+                    </div>
+                </div>
+
+                <!-- PRESETS E UTILITÁRIOS -->
+                <div class="control-card">
+                    <div class="control-card-header">
+                        <span class="control-badge green">Presets & Utilidades</span>
+                        <h3>Ações Rápidas</h3>
+                    </div>
+                    <p class="control-hint">
+                        Carregue o exemplo padrão do <code>treap.py</code> (10 a 80) ou gere nós aleatórios.
+                    </p>
+                    <div class="control-btn-row wrap">
+                        <button type="button" id="btn-preset-default" class="btn btn-secondary control-btn">Exemplo treap.py</button>
+                        <button type="button" id="btn-random-node" class="btn btn-secondary control-btn">+ Nó Aleatório</button>
+                        <button type="button" id="btn-clear" class="btn btn-ghost control-btn">Limpar Árvore</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- STATUS E MÉTRICAS EM TEMPO REAL -->
+            <div class="sim-metrics">
+                <div class="metric-pill">
+                    <span>Nós (n):</span>
+                    <strong id="metric-count">0</strong>
+                </div>
+                <div class="metric-pill">
+                    <span>Altura (h):</span>
+                    <strong id="metric-height">0</strong>
+                </div>
+                <div class="metric-pill">
+                    <span>Validação (<code>is_valid</code>):</span>
+                    <strong id="metric-valid" class="status-ok">✓ Válida (BST + Heap)</strong>
+                </div>
+                <div class="metric-pill metric-inorder">
+                    <span>Em ordem (<code>inorder</code>):</span>
+                    <strong id="metric-inorder">[]</strong>
+                </div>
+            </div>
+
+            <!-- FEEDBACK DA ÚLTIMA OPERAÇÃO -->
+            <div class="sim-feedback" id="sim-feedback" role="status" aria-live="polite">
+                Árvore inicializada com os valores padrão de <code>treap.py</code>.
+            </div>
+
+            <!-- ÁREA DE VISUALIZAÇÃO DA ÁRVORE -->
+            <div class="tree-canvas-wrapper">
+                <div class="tree-canvas-legend">
+                    <span><i class="legend-dot root"></i> Raiz</span>
+                    <span><i class="legend-dot normal"></i> Nó comum</span>
+                    <span><i class="legend-dot found"></i> Nó encontrado</span>
+                    <span><i class="legend-dot key"></i> K = Chave (BST)</span>
+                    <span><i class="legend-dot prio"></i> P = Prioridade (Heap)</span>
+                </div>
+
+                <div class="tree-canvas" id="tree-canvas">
+                    <svg id="treap-svg" aria-label="Representação visual da Treap"></svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- OPERAÇÕES SPLIT E MERGE -->
+        <section class="section split-merge-section" id="split-merge">
+            <div class="section-heading">
+                <span class="tag">OPERAÇÕES AVANÇADAS</span>
+                <h2>Split e Merge</h2>
+                <p>
+                    Divida a Treap atual em duas subárvores (<strong>Esquerda ≤ k</strong> e
+                    <strong>Direita &gt; k</strong>) usando <code>split(root, k)</code> e depois
+                    una-as novamente com <code>merge(left, right)</code>.
+                </p>
+            </div>
+
+            <div class="split-controls-bar">
+                <div class="split-input-wrap">
+                    <label for="split-key">Chave de corte (k):</label>
+                    <input type="number" id="split-key" placeholder="Ex: 45">
+                </div>
+                <button type="button" id="btn-split" class="btn">Executar Split(root, k)</button>
+                <button type="button" id="btn-merge" class="btn btn-secondary" disabled>Executar Merge(L, R)</button>
+            </div>
+
+            <!-- RESULTADO VISUAL DO SPLIT -->
+            <div class="split-preview-grid" id="split-preview-grid" hidden>
+                <div class="split-pane">
+                    <div class="split-pane-header">
+                        <span class="tag">SUBÁRVORE ESQUERDA (≤ k)</span>
+                        <strong id="split-left-inorder">[]</strong>
+                    </div>
+                    <div class="tree-canvas small-canvas">
+                        <svg id="split-left-svg" aria-label="Subárvore esquerda após Split"></svg>
+                    </div>
+                </div>
+
+                <div class="split-pane">
+                    <div class="split-pane-header">
+                        <span class="tag purple-tag">SUBÁRVORE DIREITA (&gt; k)</span>
+                        <strong id="split-right-inorder">[]</strong>
+                    </div>
+                    <div class="tree-canvas small-canvas">
+                        <svg id="split-right-svg" aria-label="Subárvore direita após Split"></svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HISTÓRICO DE EXECUÇÃO E REFERÊNCIA PYTHON -->
+        <section class="section code-ref-section" id="codigo-referencia">
+            <div class="section-heading">
+                <span class="tag">RASTREAMENTO E CÓDIGO</span>
+                <h2>Log de operações &amp; <code>treap.py</code></h2>
+                <p>Acompanhe cada rotação e operação executada comparando com o código original.</p>
+            </div>
+
+            <div class="log-and-code-grid">
+                <div class="log-panel">
+                    <div class="log-panel-header">
+                        <h3>Histórico de Execução</h3>
+                        <button type="button" id="btn-clear-log" class="btn-link">Limpar log</button>
+                    </div>
+                    <ul class="execution-log" id="execution-log"></ul>
+                </div>
+
+                <div class="python-snippet-panel">
+                    <h3>Funções principais em <code>treap.py</code></h3>
+                    <pre><code>def better(a, b):
+    # Min-Heap: a &lt; b | Max-Heap: a &gt; b
+    return a &lt; b
+
+def insert(node, key, priority=None):
+    if node is None:
+        return Node(key, priority)
+    if key &lt; node.key:
+        node.left = insert(node.left, key, priority)
+        if better(node.left.priority, node.priority):
+            node = rotate_right(node)
+    elif key &gt; node.key:
+        node.right = insert(node.right, key, priority)
+        if better(node.right.priority, node.priority):
+            node = rotate_left(node)
+    return node</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="logo">TREAP<span>.</span></div>
+            <p>Simulador Interativo — Estruturas de Dados Avançadas</p>
+            <a href="index.html">Voltar para a teoria ←</a>
+        </footer>
+    </main>
+
+    <script src="javascript.js" defer></script>
+</body>
+</html>
